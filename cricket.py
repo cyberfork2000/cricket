@@ -1,7 +1,9 @@
+import pprint
+
 # Batman analysis = [Balls faced, 4s, 6s, SR]
 # Bowler analysis = [Overs, Maidens, Runs,	Wickets, Economy]
 
-batsman = {1: {'name': 'Burns', 'runs': 0, '4s': 0, "6s": 0},
+batsman = {1: {'name': 'Burns', 'runs': 0, '4s': 0, "6s": 0, "balls": 0},
            2: {'name': 'Flint', 'runs': 0, '4s': 0, "6s": 0}}
 
 bowlers = {1: {'name': 'Archer', 'overs': 0, 'maidens': 0, "runs": 0},
@@ -12,6 +14,7 @@ print(batsman[1]['name'])
 print(batsman[1]['runs'])
 print(batsman[1]['4s'])
 print(batsman[1]['6s'])
+
 
 # def runs_scored(number):
 #     if number == 0:
@@ -29,7 +32,7 @@ print(batsman[1]['6s'])
 
 
 def is_even(x):
- # Define a function is_even that will take a number x as input.
+    # Define a function is_even that will take a number x as input.
     if x % 2 == 0:
         return True
     else:
@@ -61,9 +64,23 @@ def swap_bowler(current_bowler, other_bowler):
     return other_bowler, current_bowler
 
 
+def show_scorecard():
+    print("Scorecard")
+    print("Batsman / Runs / 4s / 6s")
+    for batter in batsman:
+        pprint.pprint(batsman[batter]['name'] + " " + str(batsman[batter]['runs'])
+                      + " " + str(batsman[batter]['4s']) + " " + str(batsman[batter]['6s']))
+    print("===================================")
+    print("Bowler / Overs / Runs")
+    for bowler in bowlers:
+        pprint.pprint(bowlers[bowler]['name'] + " " + str(bowlers[bowler]['overs'])
+                      + " " + str(bowlers[bowler]['runs']))
+
+
 def new_over(current_bowler, other_bowler, current_batsman, other_batsman):
+    show_scorecard()
     print("NEW OVER")
-    #swap bowlers & batsman
+    # swap bowlers & batsman
     return other_bowler, current_bowler, other_batsman, current_batsman
 
 
@@ -79,7 +96,6 @@ def end_of_over(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler):
 
 
 def cricket():
-
     number_of_runs = None
     current_batsman = batsman[1]
     other_batsman = batsman[2]
@@ -97,20 +113,17 @@ def cricket():
         number_of_runs = int(input("score or -1 to end: "))
         if number_of_runs == -1:
             break
-        elif is_even(number_of_runs):   # 0 2 4 6
+        elif is_even(number_of_runs):  # 0 2 4 6
             runs_scored_from_delivery(number_of_runs, current_batsman, current_bowler)
-        elif not is_even(number_of_runs):   # 1 3
+        elif not is_even(number_of_runs):  # 1 3
             runs_scored_from_delivery(number_of_runs, current_batsman, current_bowler)
-            batting_pair_swap_ends = batsman_cross(current_batsman, other_batsman)
-            current_batsman = batting_pair_swap_ends[0]
-            other_batsman = batting_pair_swap_ends[1]
+            current_batsman, other_batsman = batsman_cross(current_batsman, other_batsman)
         balls_bowled_in_over = end_of_over(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler)
 
-    print(batsman)
-    print(bowlers)
+    show_scorecard()
+#        print(batsman)
+#        print(bowlers)
 
 
 if __name__ == "__main__":
     cricket()
-
-
