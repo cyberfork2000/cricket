@@ -27,7 +27,7 @@ class TestCricket(unittest.TestCase):
     def test_2_runs_is_even(self):
         self.assertEqual(is_even(2), True)
 
-    def test_3_runs_is_even(self):
+    def test_3_runs_is_odd(self):
         self.assertEqual(is_even(3), False)
 
     # def test_batsman_cross(self):
@@ -35,9 +35,6 @@ class TestCricket(unittest.TestCase):
 
     # def test_bowlers_swap(self):
     #     self.assertEqual(swap_bowler("Smith", "Jones"), "Jones")
-
-
-
 
 
 if __name__ == '__main__':

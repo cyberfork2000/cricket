@@ -13,34 +13,15 @@ bowlers = {1: {'name': 'Archer', 'overs': 0, 'maidens': 0, "runs": 0},
            3: {'name': 'Chase', 'overs': 0, 'maidens': 0, "runs": 0},
            4: {'name': 'Holder', 'overs': 0, 'maidens': 0, "runs": 0}}
 
-print(batsman)
-print(batsman[1]['name'])
-print(batsman[1]['runs'])
-print(batsman[1]['4s'])
-print(batsman[1]['6s'])
-
-
-# def runs_scored(number):
-#     if number == 0:
-#         return 'No Run'
-#     if number == 1:
-#         return '1 Run'
-#     if number == 2:
-#         return '2 Runs'
-#     if number == 3:
-#         return '3 Runs'
-#     if number == 4:
-#         return 'FOUR Runs'
-#     if number == 6:
-#         return 'SIX Runs'
+# print(batsman)
+# print(batsman[1]['name'])
+# print(batsman[1]['runs'])
+# print(batsman[1]['4s'])
+# print(batsman[1]['6s'])
 
 
 def is_even(x):
-    # Define a function is_even that will take a number x as input.
-    if x % 2 == 0:
-        return True
-    else:
-        return False
+    return x % 2 == 0
 
 
 def boundary_scored(current_batsman, runs):
