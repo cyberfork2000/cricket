@@ -11,8 +11,7 @@ def opening_batsman(openers):
 
 
 def next_batsman(batter):
-    batter.pop(0)
-    return batter
+    return batter.pop(0)
 
 
 def batting_lineup(batting_to_come):
@@ -23,20 +22,22 @@ def batting_lineup(batting_to_come):
                 lineup.append(batting_to_come[i]['name'])
     return lineup
 
+
 batters_to_come = batting_lineup(batsman)
 print(batters_to_come)
+print(len(batters_to_come))
 batters_to_come = opening_batsman(batters_to_come)
+print(len(batters_to_come))
 print(batters_to_come)
 
-who = next_batsman(batters_to_come)
-
-who = ' '.join(map(str, who))
-
-print(who)
-
+print(len(batters_to_come))
+next_man = next_batsman(batters_to_come)
+print(len(batters_to_come))
+print(next_man)
+print(batters_to_come)
 
 for player in batsman:
-    if batsman[player]['name'] == who:
+    if batsman[player]['name'] == next_man:
         current_batsman = batsman[player]
 
 
@@ -44,7 +45,8 @@ print("current batsman", current_batsman)
 
 
 while len(batters_to_come) > 0:
-    batters_to_come = next_batsman(batters_to_come)
+    who_is_next = next_batsman(batters_to_come)
+    print(who_is_next)
     print(batters_to_come)
 if len(batters_to_come) == 0:
     print("All Out")
