@@ -24,33 +24,34 @@ def batting_lineup(batting_to_come):
 
 
 batters_to_come = batting_lineup(batsman)
-print(batters_to_come)
-print(len(batters_to_come))
-batters_to_come = opening_batsman(batters_to_come)
-print(len(batters_to_come))
-print(batters_to_come)
-
-print(len(batters_to_come))
-next_man = next_batsman(batters_to_come)
-print(len(batters_to_come))
-print(next_man)
-print(batters_to_come)
-
-for player in batsman:
-    if batsman[player]['name'] == next_man:
-        current_batsman = batsman[player]
-
-
-print("current batsman", current_batsman)
+print("Complete batting lineup is", batters_to_come)
+# print(len(batters_to_come))
+# batters_to_come = opening_batsman(batters_to_come)
+# print(len(batters_to_come))
+# print(batters_to_come)
+#
+# print(len(batters_to_come))
+# next_man = next_batsman(batters_to_come)
+# print(len(batters_to_come))
+# print(next_man)
+# print(batters_to_come)
+#
+# for player in batsman:
+#     if batsman[player]['name'] == next_man:
+#         current_batsman = batsman[player]
+#
+#
+# print("current batsman", current_batsman)
 
 
 while len(batters_to_come) > 0:
     who_is_next = next_batsman(batters_to_come)
-    print(who_is_next)
-    print(batters_to_come)
+    print("Next batsman is", who_is_next)
+    print("Remaining batsman are", batters_to_come)
+
 if len(batters_to_come) == 0:
     print("All Out")
-else:
-    print("Batsman left", len(batters_to_come))
+# else:
+#     print("Batsman left", len(batters_to_come))
 
 
