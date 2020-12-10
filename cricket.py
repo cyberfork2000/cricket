@@ -142,7 +142,7 @@ def pretty(d, indent=0):  # print dictionary in pretty indenting on each key & v
 
 
 def wicket_is_taken(the_batsman, the_bowler):
-    print("wicket")
+    print("OUT", the_batsman)
     runs_scored_from_delivery(0, the_batsman, the_bowler)
     return the_bowler['wickets'] + 1  # credit bowler with wicket
 
@@ -153,7 +153,6 @@ def next_batsman_in(batsman_in_next):
         if batsman[player]['name'] == who_is_next:
             print("Next Batsman in", who_is_next)
             return batsman[player]
-            #break
 
 
 def cricket():
@@ -181,17 +180,12 @@ def cricket():
             balls_bowled_in_over = 0  # reset balls for over
             overs_bowled_by_bowler = current_bowler['overs']
         number_of_runs = int(input("score or -1 to end: "))
-        if number_of_runs == -1:
-            print("End of match!")
-            break
-        elif number_of_runs == -2:
+        if number_of_runs == -2:
             current_bowler['wickets'] = wicket_is_taken(current_batsman, current_bowler)
             # next batsman in
-            print("OUT", current_batsman)
-            number_of_batsman_left = len(batters_to_come)
-            if number_of_batsman_left > 0:
+            if len(batters_to_come) > 0:
                 current_batsman = next_batsman_in(batters_to_come)
-            elif number_of_batsman_left == 0:
+            elif len(batters_to_come) == 0:
                 print("All Out")
                 end_of_innings = True
         elif is_even(number_of_runs):  # 0 2 4 6
@@ -199,6 +193,9 @@ def cricket():
         elif not is_even(number_of_runs):  # 1 3
             runs_scored_from_delivery(number_of_runs, current_batsman, current_bowler)
             current_batsman, other_batsman = batsman_cross(current_batsman, other_batsman)
+        elif number_of_runs == -1:
+            print("End of match!")
+            break
         balls_bowled_in_over = end_of_over(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler)
 
     show_scorecard()
