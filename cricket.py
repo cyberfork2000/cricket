@@ -147,6 +147,15 @@ def wicket_is_taken(the_batsman, the_bowler):
     return the_bowler['wickets'] + 1  # credit bowler with wicket
 
 
+def next_batsman_in(batsman_in_next):
+    who_is_next = next_batsman(batsman_in_next)
+    for player in batsman:
+        if batsman[player]['name'] == who_is_next:
+            print("Next Batsman in", who_is_next)
+            return batsman[player]
+            #break
+
+
 def cricket():
     number_of_runs = None
     batters_to_come = batting_lineup(batsman)
@@ -181,12 +190,7 @@ def cricket():
             print("OUT", current_batsman)
             number_of_batsman_left = len(batters_to_come)
             if number_of_batsman_left > 0:
-                who_is_next = next_batsman(batters_to_come)
-                for i in batsman:
-                    if batsman[i]['name'] == who_is_next:
-                        print("Next Batsman in", who_is_next)
-                        current_batsman = batsman[i]
-                        break
+                current_batsman = next_batsman_in(batters_to_come)
             elif number_of_batsman_left == 0:
                 print("All Out")
                 end_of_innings = True
