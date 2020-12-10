@@ -38,8 +38,8 @@ def runs_scored_from_delivery(runs, current_batsman, current_bowler):
     current_batsman['runs'] = current_batsman['runs'] + runs
     current_batsman['balls'] = current_batsman['balls'] + 1
     boundary_scored(current_batsman, runs)
-    print("Bowler conceded is {}".format(current_bowler['runs']))
-    print("Batsman has scored {}".format(current_batsman['runs']))
+    #print("Bowler conceded is {}".format(current_bowler['runs']))
+    #print("Batsman has scored {}".format(current_batsman['runs']))
 
 
 def batsman_cross(current_batsman, other_batsman):
@@ -77,8 +77,7 @@ def show_scorecard():
 def new_over(current_bowler, other_bowler, current_batsman, other_batsman):
     show_scorecard()
     print("NEW OVER")
-    # swap bowlers & batsman
-    return other_bowler, current_bowler, other_batsman, current_batsman
+    return other_bowler, current_bowler, other_batsman, current_batsman  # swap bowlers & batsman
 
 
 def end_of_over(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler):
@@ -111,6 +110,37 @@ def batting_lineup(batting_to_come):
     return lineup
 
 
+def available_bowlers(who_can_bowl, current_bowler, other_bowler):
+    eligible_bowler_list = []
+    print("Available bowlers")
+    for key, value in who_can_bowl.items():
+        if not (value['name'] is current_bowler['name']):  # or value['name'] is other_bowler['name']
+            eligible_bowler_list.append(key)
+            print(str(key), value['name'])
+    return eligible_bowler_list
+
+
+def set_next_bowler(is_bowler_eligible):
+    while True:
+        try:
+            choose_bowler = int(input("Choose bowler: "))
+            if choose_bowler in is_bowler_eligible:
+                break
+            print("Invalid bowler entered")
+        except Exception as e:
+            print(e)
+    return bowlers[choose_bowler]
+
+
+def pretty(d, indent=0):  # print dictionary in pretty indenting on each key & value
+    for key, value in d.items():
+        print('\t' * indent + str(key))
+        if isinstance(value, dict):
+            pretty(value, indent + 1)
+        else:
+            print('\t' * (indent + 1) + str(value))
+
+
 def cricket():
     number_of_runs = None
     batters_to_come = batting_lineup(batsman)
@@ -127,8 +157,12 @@ def cricket():
 
     while number_of_runs != -1 and end_of_innings is False:
         if balls_bowled_in_over == 6:
-            current_bowler, other_bowler, current_batsman, other_batsman = \
-                new_over(current_bowler, other_bowler, current_batsman, other_batsman)
+            if input("Change bowler? ") is 'y':
+                bowler_list = available_bowlers(bowlers, current_bowler, other_bowler)
+                current_bowler = set_next_bowler(bowler_list)
+            else:
+                current_bowler, other_bowler, current_batsman, other_batsman = \
+                    new_over(current_bowler, other_bowler, current_batsman, other_batsman)
             balls_bowled_in_over = 0  # reset balls for over
             overs_bowled_by_bowler = current_bowler['overs']
         number_of_runs = int(input("score or -1 to end: "))
@@ -138,8 +172,7 @@ def cricket():
         elif number_of_runs == -2:
             print("wicket")
             runs_scored_from_delivery(0, current_batsman, current_bowler)
-            # credit bowler with wicket
-            current_bowler['wickets'] = current_bowler['wickets'] + 1
+            current_bowler['wickets'] = current_bowler['wickets'] + 1  # credit bowler with wicket
             # next batsman in
             print("OUT", current_batsman)
             number_of_batsman_left = len(batters_to_come)
