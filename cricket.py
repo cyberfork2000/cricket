@@ -141,6 +141,12 @@ def pretty(d, indent=0):  # print dictionary in pretty indenting on each key & v
             print('\t' * (indent + 1) + str(value))
 
 
+def wicket_is_taken(the_batsman, the_bowler):
+    print("wicket")
+    runs_scored_from_delivery(0, the_batsman, the_bowler)
+    return the_bowler['wickets'] + 1  # credit bowler with wicket
+
+
 def cricket():
     number_of_runs = None
     batters_to_come = batting_lineup(batsman)
@@ -170,9 +176,7 @@ def cricket():
             print("End of match!")
             break
         elif number_of_runs == -2:
-            print("wicket")
-            runs_scored_from_delivery(0, current_batsman, current_bowler)
-            current_bowler['wickets'] = current_bowler['wickets'] + 1  # credit bowler with wicket
+            current_bowler['wickets'] = wicket_is_taken(current_batsman, current_bowler)
             # next batsman in
             print("OUT", current_batsman)
             number_of_batsman_left = len(batters_to_come)
