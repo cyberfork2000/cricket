@@ -110,7 +110,7 @@ def batting_lineup(batting_to_come):
     return lineup
 
 
-def available_bowlers(who_can_bowl, current_bowler, other_bowler):
+def available_bowlers(who_can_bowl, current_bowler):
     eligible_bowler_list = []
     print("Available bowlers")
     for key, value in who_can_bowl.items():
@@ -156,7 +156,7 @@ def next_batsman_in(batsman_in_next):
 
 
 def cricket():
-    number_of_runs = None
+    delivery_outcome = None
     batters_to_come = batting_lineup(batsman)
     print("Complete batting lineup is", batters_to_come)
     current_batsman = batsman[1]
@@ -169,18 +169,20 @@ def cricket():
     balls_bowled_in_over = 0
     end_of_innings = False
 
-    while number_of_runs != -1 and end_of_innings is False:
+    while delivery_outcome != "Q" and end_of_innings is False:
         if balls_bowled_in_over == 6:
             if input("Change bowler? ") is 'y':
-                bowler_list = available_bowlers(bowlers, current_bowler, other_bowler)
+                bowler_list = available_bowlers(bowlers, current_bowler)
                 current_bowler = set_next_bowler(bowler_list)
             else:
                 current_bowler, other_bowler, current_batsman, other_batsman = \
                     new_over(current_bowler, other_bowler, current_batsman, other_batsman)
             balls_bowled_in_over = 0  # reset balls for over
             overs_bowled_by_bowler = current_bowler['overs']
-        number_of_runs = int(input("score or -1 to end: "))
-        if number_of_runs == -2:
+        delivery_outcome = input("Enter number of runs scored (i.e. 0, 1, 2, 3, 4, 6).\nOr 'W' for wicket.\nOr 'Q' to "
+                                 "quit\n>> ")
+        delivery_outcome = delivery_outcome.upper()
+        if delivery_outcome[0] == "W":
             current_bowler['wickets'] = wicket_is_taken(current_batsman, current_bowler)
             # next batsman in
             if len(batters_to_come) > 0:
@@ -188,12 +190,14 @@ def cricket():
             elif len(batters_to_come) == 0:
                 print("All Out")
                 end_of_innings = True
-        elif is_even(number_of_runs):  # 0 2 4 6
-            runs_scored_from_delivery(number_of_runs, current_batsman, current_bowler)
-        elif not is_even(number_of_runs):  # 1 3
-            runs_scored_from_delivery(number_of_runs, current_batsman, current_bowler)
-            current_batsman, other_batsman = batsman_cross(current_batsman, other_batsman)
-        elif number_of_runs == -1:
+        elif delivery_outcome.isnumeric():
+            delivery_outcome = int(delivery_outcome)
+            if is_even(delivery_outcome):  # 0 2 4 6
+                runs_scored_from_delivery(delivery_outcome, current_batsman, current_bowler)
+            elif not is_even(delivery_outcome):  # 1 3
+                runs_scored_from_delivery(delivery_outcome, current_batsman, current_bowler)
+                current_batsman, other_batsman = batsman_cross(current_batsman, other_batsman)
+        elif delivery_outcome[0] == "Q":
             print("End of match!")
             break
         balls_bowled_in_over = end_of_over(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler)
