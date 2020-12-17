@@ -80,15 +80,27 @@ def new_over(current_bowler, other_bowler, current_batsman, other_batsman):
     return other_bowler, current_bowler, other_batsman, current_batsman  # swap bowlers & batsman
 
 
-def end_of_over(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler):
+def latest_delivery_completed(balls_bowled_in_over):
     balls_bowled_in_over += 1
+    return balls_bowled_in_over
+
+
+def increment_balls_bowled_by_bowler(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler):
     current_bowler['overs'] = str(overs_bowled_by_bowler) + "." + str(balls_bowled_in_over)
     print("Balls in over " + current_bowler['overs'])
-    if balls_bowled_in_over == 6:  # end of over check
-        current_bowler['overs'] = overs_bowled_by_bowler + 1
-        print("END OF OVER, bowler stats are")
-        print(current_bowler)
-    return balls_bowled_in_over
+    return current_bowler['overs']
+
+
+def set_bowler_completed_over_count(current_bowler, overs_bowled_by_bowler):
+    current_bowler['overs'] = overs_bowled_by_bowler + 1
+    return current_bowler
+
+
+def end_of_over_check(balls_bowled_in_over):
+    if balls_bowled_in_over == 6:
+        return True
+    else:
+        return False
 
 
 def opening_batsman(openers):
@@ -155,6 +167,29 @@ def next_batsman_in(batsman_in_next):
             return batsman[player]
 
 
+def enter_game_option():
+    delivery_outcome = input("Enter number of runs scored (i.e. 0, 1, 2, 3, 4, 6).\nOr 'W' for wicket.\nOr 'Q' to "
+                             "quit\n>> ")
+    return delivery_outcome.upper()
+
+
+def choose_new_bowler(current_bowler):
+    bowler_list = available_bowlers(bowlers, current_bowler)
+    return set_next_bowler(bowler_list)  # return set_next_bowler(bowler_list)
+
+
+def display_bowler_end_of_over_stats(current_bowler):
+    print("END OF OVER, bowler stats are")
+    print(current_bowler)
+
+
+def change_bowler_for_next_over(current_bowler):
+    if input("Change bowler? ") is 'y':
+        return choose_new_bowler(current_bowler)
+    else:
+        print("no change")
+
+
 def cricket():
     delivery_outcome = None
     batters_to_come = batting_lineup(batsman)
@@ -168,20 +203,26 @@ def cricket():
     overs_bowled_by_bowler = 0
     balls_bowled_in_over = 0
     end_of_innings = False
+    last_ball_of_over = False
 
     while delivery_outcome != "Q" and end_of_innings is False:
-        if balls_bowled_in_over == 6:
+        if last_ball_of_over is True:
+            current_bowler = set_bowler_completed_over_count(current_bowler, overs_bowled_by_bowler)
+            display_bowler_end_of_over_stats(current_bowler)
+
             if input("Change bowler? ") is 'y':
                 bowler_list = available_bowlers(bowlers, current_bowler)
-                current_bowler = set_next_bowler(bowler_list)
-            else:
-                current_bowler, other_bowler, current_batsman, other_batsman = \
-                    new_over(current_bowler, other_bowler, current_batsman, other_batsman)
+                other_bowler = set_next_bowler(bowler_list)
+####
+#            other_bowler = change_bowler_for_next_over(current_bowler)
+####
             balls_bowled_in_over = 0  # reset balls for over
+            last_ball_of_over = False
+            current_bowler, other_bowler, current_batsman, other_batsman = \
+                new_over(current_bowler, other_bowler, current_batsman, other_batsman)
             overs_bowled_by_bowler = current_bowler['overs']
-        delivery_outcome = input("Enter number of runs scored (i.e. 0, 1, 2, 3, 4, 6).\nOr 'W' for wicket.\nOr 'Q' to "
-                                 "quit\n>> ")
-        delivery_outcome = delivery_outcome.upper()
+
+        delivery_outcome = enter_game_option()
         if delivery_outcome[0] == "W":
             current_bowler['wickets'] = wicket_is_taken(current_batsman, current_bowler)
             # next batsman in
@@ -200,7 +241,10 @@ def cricket():
         elif delivery_outcome[0] == "Q":
             print("End of match!")
             break
-        balls_bowled_in_over = end_of_over(balls_bowled_in_over, current_bowler, overs_bowled_by_bowler)
+        balls_bowled_in_over = latest_delivery_completed(balls_bowled_in_over)
+        current_bowler['overs'] = increment_balls_bowled_by_bowler(
+            balls_bowled_in_over, current_bowler, overs_bowled_by_bowler)
+        last_ball_of_over = end_of_over_check(balls_bowled_in_over)
 
     show_scorecard()
 
