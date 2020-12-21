@@ -1,24 +1,5 @@
 import pprint
 
-# Batman analysis = [Balls faced, 4s, 6s, SR]
-# Bowler analysis = [Overs, Maidens, Runs,	Wickets, Economy]
-
-batsman = {1: {'name': 'Burns', 'runs': 0, '4s': 0, "6s": 0, "balls": 0},
-           2: {'name': 'Flint', 'runs': 0, '4s': 0, "6s": 0, "balls": 0},
-           3: {'name': 'Yardy', 'runs': 0, '4s': 0, "6s": 0, "balls": 0},
-           4: {'name': 'Gooch', 'runs': 0, '4s': 0, "6s": 0, "balls": 0}}
-
-bowlers = {1: {'name': 'Archer', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0},
-           2: {'name': 'Broad', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0},
-           3: {'name': 'Chase', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0},
-           4: {'name': 'Holder', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0}}
-
-# print(batsman)
-# print(batsman[1]['name'])
-# print(batsman[1]['runs'])
-# print(batsman[1]['4s'])
-# print(batsman[1]['6s'])
-
 
 def is_even(x):
     return x % 2 == 0
@@ -38,8 +19,6 @@ def runs_scored_from_delivery(runs, current_batsman, current_bowler):
     current_batsman['runs'] = current_batsman['runs'] + runs
     current_batsman['balls'] = current_batsman['balls'] + 1
     boundary_scored(current_batsman, runs)
-    #print("Bowler conceded is {}".format(current_bowler['runs']))
-    #print("Batsman has scored {}".format(current_batsman['runs']))
 
 
 def batsman_cross(current_batsman, other_batsman):
@@ -50,7 +29,7 @@ def swap_bowler(current_bowler, other_bowler):
     return other_bowler, current_bowler
 
 
-def show_scorecard():
+def show_scorecard(batsman, bowlers):
     print("Scorecard")
     total_runs_scored = 0
     print("Batsman / Runs / 4s / 6s / Balls")
@@ -75,8 +54,6 @@ def show_scorecard():
 
 
 def new_over(current_bowler, other_bowler, current_batsman, other_batsman):
-    show_scorecard()
-    print("NEW OVER")
     return other_bowler, current_bowler, other_batsman, current_batsman  # swap bowlers & batsman
 
 
@@ -132,7 +109,7 @@ def available_bowlers(who_can_bowl, current_bowler):
     return eligible_bowler_list
 
 
-def set_next_bowler(is_bowler_eligible):
+def set_next_bowler(is_bowler_eligible, bowlers):
     while True:
         try:
             choose_bowler = int(input("Choose bowler: "))
@@ -159,7 +136,7 @@ def wicket_is_taken(the_batsman, the_bowler):
     return the_bowler['wickets'] + 1  # credit bowler with wicket
 
 
-def next_batsman_in(batsman_in_next):
+def next_batsman_in(batsman_in_next, batsman):
     who_is_next = next_batsman(batsman_in_next)
     for player in batsman:
         if batsman[player]['name'] == who_is_next:
@@ -170,14 +147,15 @@ def next_batsman_in(batsman_in_next):
 
 
 def enter_game_option():
-    delivery_outcome = input("Enter number of runs scored (i.e. 0, 1, 2, 3, 4, 6).\nOr 'W' for wicket.\nOr 'Q' to "
-                             "quit\n>> ")
+    delivery_outcome = input("Enter number of runs scored (i.e. 0, 1, 2, 3, 4, 6)."
+                             "\nOr 'W' for wicket."
+                             "\nOr 'Q' to quit. ")
     return delivery_outcome.upper()
 
 
-def choose_new_bowler(current_bowler):
+def choose_new_bowler(current_bowler, bowlers):
     bowler_list = available_bowlers(bowlers, current_bowler)
-    return set_next_bowler(bowler_list)  # return set_next_bowler(bowler_list)
+    return set_next_bowler(bowler_list, bowlers)
 
 
 def display_bowler_end_of_over_stats(current_bowler):
@@ -193,6 +171,16 @@ def change_bowler_for_next_over(current_bowler):
 
 
 def cricket():
+    batsman = {1: {'name': 'Burns', 'runs': 0, '4s': 0, "6s": 0, "balls": 0},
+               2: {'name': 'Flint', 'runs': 0, '4s': 0, "6s": 0, "balls": 0},
+               3: {'name': 'Yardy', 'runs': 0, '4s': 0, "6s": 0, "balls": 0},
+               4: {'name': 'Gooch', 'runs': 0, '4s': 0, "6s": 0, "balls": 0}}
+
+    bowlers = {1: {'name': 'Archer', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0},
+               2: {'name': 'Broad', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0},
+               3: {'name': 'Chase', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0},
+               4: {'name': 'Holder', 'overs': 0, 'maidens': 0, "runs": 0, "wickets": 0}}
+
     delivery_outcome = None
     batters_to_come = batting_lineup(batsman)
     print("Complete batting lineup is", batters_to_come)
@@ -211,15 +199,11 @@ def cricket():
         if last_ball_of_over is True:
             current_bowler = set_bowler_completed_over_count(current_bowler, overs_bowled_by_bowler)
             display_bowler_end_of_over_stats(current_bowler)
-
+            show_scorecard(batsman, bowlers)
             if input("Change bowler? ") is 'y':
                 bowler_list = available_bowlers(bowlers, current_bowler)
-                other_bowler = set_next_bowler(bowler_list)
-####
-#            other_bowler = change_bowler_for_next_over(current_bowler)
-####
+                other_bowler = set_next_bowler(bowler_list, bowlers)
             balls_bowled_in_over = 0  # reset balls for over
-            last_ball_of_over = False
             current_bowler, other_bowler, current_batsman, other_batsman = \
                 new_over(current_bowler, other_bowler, current_batsman, other_batsman)
             overs_bowled_by_bowler = current_bowler['overs']
@@ -229,7 +213,7 @@ def cricket():
             current_bowler['wickets'] = wicket_is_taken(current_batsman, current_bowler)
             # next batsman in
             if len(batters_to_come) > 0:
-                current_batsman = next_batsman_in(batters_to_come)
+                current_batsman = next_batsman_in(batters_to_come, batsman)
             elif len(batters_to_come) == 0:
                 print("All Out")
                 end_of_innings = True
@@ -242,14 +226,24 @@ def cricket():
                 current_batsman, other_batsman = batsman_cross(current_batsman, other_batsman)
         elif delivery_outcome[0] == "Q":
             print("End of match!")
+            show_scorecard(batsman, bowlers)
             break
         balls_bowled_in_over = latest_delivery_completed(balls_bowled_in_over)
         current_bowler['overs'] = increment_balls_bowled_by_bowler(
             balls_bowled_in_over, current_bowler, overs_bowled_by_bowler)
         last_ball_of_over = end_of_over_check(balls_bowled_in_over)
 
-    show_scorecard()
-
 
 if __name__ == "__main__":
     cricket()
+
+# Batman analysis = [Balls faced, 4s, 6s, SR]
+# Bowler analysis = [Overs, Maidens, Runs,	Wickets, Economy]
+
+
+
+# print(batsman)
+# print(batsman[1]['name'])
+# print(batsman[1]['runs'])
+# print(batsman[1]['4s'])
+# print(batsman[1]['6s'])
