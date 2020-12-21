@@ -165,6 +165,8 @@ def next_batsman_in(batsman_in_next):
         if batsman[player]['name'] == who_is_next:
             print("Next Batsman in", who_is_next)
             return batsman[player]
+        else:
+            return None
 
 
 def enter_game_option():
