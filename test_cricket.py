@@ -5,35 +5,32 @@ from cricket import is_even, batsman_cross, swap_bowler, new_over, end_of_over_c
 
 class TestCricket(unittest.TestCase):
 
-    # def test_0_runs_is_even(self):
-    #     self.assertEqual(is_even(0), True)
-    #
-    # def test_2_runs_is_even(self):
-    #     self.assertEqual(is_even(2), True)
-    #
-    # def test_3_runs_is_odd(self):
-    #     self.assertEqual(is_even(3), False)
-    #
-    # def test_batsman_cross(self):
-    #     self.assertEqual(batsman_cross("Smith", "Jones"), ("Jones", "Smith"))
-    #
-    # def test_bowlers_swap(self):
-    #     self.assertEqual(swap_bowler("Smith", "Jones"), ("Jones", "Smith"))
-    #
-    # def test_new_over(self):
-    #     self.assertEqual(new_over("Archer", "Baker", "Charles", "Draper"), ("Baker", "Archer", "Draper", "Charles"))
-    #
-    # def test_first_ball_bowled(self):
-    #     self.assertEqual(end_of_over_check(1, {'name': 'Archer', 'overs': 0, 'maidens': 0, 'runs': 0, 'wickets': 0}, 1), 2)
-    #
-    # def test_second_ball_bowled(self):
-    #     self.assertEqual(end_of_over_check(2, {'name': 'Archer', 'overs': 0, 'maidens': 0, 'runs': 0, 'wickets': 0}, 1), 3)
-    #
-    # def test_sixth_ball_bowled(self):
-    #     self.assertEqual(end_of_over_check(5, {'name': 'Archer', 'overs': 0, 'maidens': 0, 'runs': 0, 'wickets': 0}, 1), 6)
+    def test_0_runs_is_even(self):
+        self.assertEqual(is_even(0), True)
 
-    # def test_final_ball_bowled(self):
-    #     self.assertEqual(end_of_over_check(6, {'name': 'Archer', 'overs': 0, 'maidens': 0, 'runs': 0, 'wickets': 0}, 1), 6)
+    def test_2_runs_is_even(self):
+        self.assertEqual(is_even(2), True)
+
+    def test_3_runs_is_odd(self):
+        self.assertEqual(is_even(3), False)
+
+    def test_batsman_cross(self):
+        self.assertEqual(batsman_cross("Smith", "Jones"), ("Jones", "Smith"))
+
+    def test_bowlers_swap(self):
+        self.assertEqual(swap_bowler("Smith", "Jones"), ("Jones", "Smith"))
+
+    def test_new_over(self):
+        self.assertEqual(new_over("Archer", "Baker", "Charles", "Draper"), ("Baker", "Archer", "Draper", "Charles"))
+
+    def test_zero_balls_bowled(self):
+        self.assertEqual(end_of_over_check(0), False)
+
+    def test_second_ball_bowled(self):
+        self.assertEqual(end_of_over_check(2), False)
+
+    def test_sixth_ball_bowled(self):
+        self.assertEqual(end_of_over_check(6), True)
 
     def test_first_delivery_of_over_completed(self):
         self.assertEqual(latest_delivery_completed(0), 1)
