@@ -169,7 +169,7 @@ class Cricket(object):
     def next_batsman_in_after_fall_of_wicket(self):
         next_man_in = self.the_batting_order.pop(0)
 
-        for key, player in First_innings.batsman.items():
+        for key, player in self.batsman.items():
             if next_man_in == player['name']:
                 self.current_batsman = player
 
@@ -177,59 +177,69 @@ class Cricket(object):
         return self.current_batsman
 
 
-First_innings = Cricket()
-delivery_outcome = None
-last_ball_of_over = False
-end_of_innings = False
+class Game(object):
 
-while delivery_outcome != "Q" and end_of_innings is False:
-    if last_ball_of_over is True:
-        First_innings.current_bowler = \
-            First_innings.set_bowler_completed_over_count(First_innings.current_bowler,
-                                                          First_innings.overs_bowled_by_bowler)
-        First_innings.display_bowler_end_of_over_stats(First_innings.current_bowler)
-        First_innings.show_scorecard(First_innings.batsman, First_innings.bowlers)
-        if input("Change bowler? ") is 'y':
-            First_innings.bowler_list = \
-                First_innings.available_bowlers(First_innings.bowlers, First_innings.current_bowler)
-            First_innings.other_bowler = \
-                First_innings.set_next_bowler(First_innings.bowler_list, First_innings.bowlers)
-        First_innings.balls_bowled_in_over = 0  # reset balls for over
-        First_innings.current_bowler, First_innings.other_bowler, \
-            First_innings.current_batsman, First_innings.other_batsman = First_innings.new_over(
-                First_innings.current_bowler, First_innings.other_bowler,
-                First_innings.current_batsman, First_innings.other_batsman)
-        First_innings.overs_bowled_by_bowler = First_innings.current_bowler['overs']
+    def __init__(self, which_innings):
+        self.which_innings = which_innings
 
-    delivery_outcome = First_innings.enter_game_option()
-    if delivery_outcome[0] == "W":
-        First_innings.current_bowler['wickets'] = First_innings.wicket_is_taken(First_innings.current_batsman,
-                                                                                First_innings.current_bowler)
-        # next batsman in
-        if len(First_innings.the_batting_order) > 0:
-            First_innings.current_batsman = First_innings.next_batsman_in_after_fall_of_wicket()
+    innings = Cricket()
 
-        elif len(First_innings.the_batting_order) == 0:
-            print("All Out")
-            end_of_innings = True
-    elif delivery_outcome.isnumeric():
-        delivery_outcome = int(delivery_outcome)
-        if First_innings.is_even(delivery_outcome):  # 0 2 4 6
-            First_innings.runs_scored_from_delivery(delivery_outcome, First_innings.current_batsman,
-                                                    First_innings.current_bowler)
-        elif not First_innings.is_even(delivery_outcome):  # 1 3
-            First_innings.runs_scored_from_delivery(delivery_outcome, First_innings.current_batsman,
-                                                    First_innings.current_bowler)
-            First_innings.current_batsman, First_innings.other_batsman = First_innings.batsman_cross(
-                First_innings.current_batsman,
-                First_innings.other_batsman)
-    elif delivery_outcome[0] == "Q":
-        print("End of match!")
-        break
-    First_innings.balls_bowled_in_over = First_innings.latest_delivery_completed(First_innings.balls_bowled_in_over)
-    First_innings.current_bowler['overs'] = First_innings.increment_balls_bowled_by_bowler(
-        First_innings.balls_bowled_in_over, First_innings.current_bowler, First_innings.overs_bowled_by_bowler)
-    last_ball_of_over = First_innings.end_of_over_check(First_innings.balls_bowled_in_over)
+    delivery_outcome = None
+    last_ball_of_over = False
+    end_of_innings = False
+
+    while delivery_outcome != "Q" and end_of_innings is False:
+        if last_ball_of_over is True:
+            innings.current_bowler = \
+                innings.set_bowler_completed_over_count(innings.current_bowler,
+                                                        innings.overs_bowled_by_bowler)
+            innings.display_bowler_end_of_over_stats(innings.current_bowler)
+            innings.show_scorecard(innings.batsman, innings.bowlers)
+            if input("Change bowler? ") is 'y':
+                innings.bowler_list = \
+                    innings.available_bowlers(innings.bowlers, innings.current_bowler)
+                innings.other_bowler = \
+                    innings.set_next_bowler(innings.bowler_list, innings.bowlers)
+            innings.balls_bowled_in_over = 0  # reset balls for over
+            innings.current_bowler, innings.other_bowler, \
+            innings.current_batsman, innings.other_batsman = innings.new_over(
+                    innings.current_bowler, innings.other_bowler,
+                    innings.current_batsman, innings.other_batsman)
+            innings.overs_bowled_by_bowler = innings.current_bowler['overs']
+
+        delivery_outcome = innings.enter_game_option()
+        if delivery_outcome[0] == "W":
+            innings.current_bowler['wickets'] = innings.wicket_is_taken(innings.current_batsman,
+                                                                        innings.current_bowler)
+            # next batsman in
+            if len(innings.the_batting_order) > 0:
+                innings.current_batsman = innings.next_batsman_in_after_fall_of_wicket()
+
+            elif len(innings.the_batting_order) == 0:
+                print("All Out")
+                end_of_innings = True
+        elif delivery_outcome.isnumeric():
+            delivery_outcome = int(delivery_outcome)
+            if innings.is_even(delivery_outcome):  # 0 2 4 6
+                innings.runs_scored_from_delivery(delivery_outcome, innings.current_batsman,
+                                                  innings.current_bowler)
+            elif not innings.is_even(delivery_outcome):  # 1 3
+                innings.runs_scored_from_delivery(delivery_outcome, innings.current_batsman,
+                                                  innings.current_bowler)
+                innings.current_batsman, innings.other_batsman = innings.batsman_cross(
+                    innings.current_batsman,
+                    innings.other_batsman)
+        elif delivery_outcome[0] == "Q":
+            print("End of match!")
+            break
+        innings.balls_bowled_in_over = innings.latest_delivery_completed(innings.balls_bowled_in_over)
+        innings.current_bowler['overs'] = innings.increment_balls_bowled_by_bowler(
+            innings.balls_bowled_in_over, innings.current_bowler, innings.overs_bowled_by_bowler)
+        last_ball_of_over = innings.end_of_over_check(innings.balls_bowled_in_over)
+
+    innings.show_scorecard(innings.batsman, innings.bowlers)
 
 
-First_innings.show_scorecard(First_innings.batsman, First_innings.bowlers)
+Game("1st")
+Game("2nd")
+
