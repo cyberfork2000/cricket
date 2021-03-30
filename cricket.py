@@ -121,12 +121,13 @@ class Cricket(object):
         total_wickets_taken = 0
         print("Bowler / Overs / Maidens / Runs / Wickets")
         for bowler in bowlers:
-            total_wickets_taken = total_wickets_taken + bowlers[bowler]['wickets']
-            pprint.pprint(bowlers[bowler]['name'] + ", "
-                          + str(bowlers[bowler]['overs']) + ", "
-                          + str(bowlers[bowler]['maidens']) + ", "
-                          + str(bowlers[bowler]['runs']) + ", "
-                          + str(bowlers[bowler]['wickets']))
+            if float(bowlers[bowler]['overs']) > 0:
+                total_wickets_taken = total_wickets_taken + bowlers[bowler]['wickets']
+                pprint.pprint(bowlers[bowler]['name'] + ", "
+                              + str(bowlers[bowler]['overs']) + ", "
+                              + str(bowlers[bowler]['maidens']) + ", "
+                              + str(bowlers[bowler]['runs']) + ", "
+                              + str(bowlers[bowler]['wickets']))
         print("\n", total_runs_scored, "for", total_wickets_taken)
 
     @staticmethod
