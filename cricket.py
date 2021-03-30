@@ -111,12 +111,13 @@ class Cricket(object):
         total_runs_scored = 0
         print("Batsman / Runs / 4s / 6s / Balls")
         for batter in batsman:
-            total_runs_scored = total_runs_scored + batsman[batter]['runs']
-            pprint.pprint(batsman[batter]['name'] + ", "
-                          + str(batsman[batter]['runs']) + ", "
-                          + str(batsman[batter]['4s']) + ", "
-                          + str(batsman[batter]['6s']) + ", "
-                          + str(batsman[batter]['balls']))
+            if int(batsman[batter]['balls']) > 0:
+                total_runs_scored = total_runs_scored + batsman[batter]['runs']
+                pprint.pprint(batsman[batter]['name'] + ", "
+                              + str(batsman[batter]['runs']) + ", "
+                              + str(batsman[batter]['4s']) + ", "
+                              + str(batsman[batter]['6s']) + ", "
+                              + str(batsman[batter]['balls']))
         print("===================================")
         total_wickets_taken = 0
         print("Bowler / Overs / Maidens / Runs / Wickets")
